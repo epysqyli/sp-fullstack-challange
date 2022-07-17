@@ -24,16 +24,16 @@ class Flight extends Model
     return round($price, 2);
   }
 
-  private static function find_all_Connections(string $departure_code, string $arrival_code): Collection
+  private static function find_all_connections(string $departure_code, string $arrival_code): Collection
   {
     $from_departure = self::where('departure_code', $departure_code)->get();
     $to_arrival = self::where('arrival_code', $arrival_code)->get();
     return $from_departure->merge($to_arrival);
   }
 
-  public static function get_connecting_flights(string $departure_code, string $arrival_code): Collection
+  private static function get_connecting_flights(string $departure_code, string $arrival_code): Collection
   {
-    $flights = self::find_all_Connections($departure_code, $arrival_code);
+    $flights = self::find_all_connections($departure_code, $arrival_code);
     $codes = Airport::whereNotIn('code', [$departure_code, $arrival_code])->pluck('code')->toArray();
 
     $results = new Collection();
