@@ -20,6 +20,16 @@ class FlightSeeder extends Seeder
         }
       }
     }
+
+    // remove random items so that not all airports have direct flights
+    $keys_to_be_removed = [];
+    for ($i = 0; $i < 40; $i++) {
+      array_push($keys_to_be_removed, rand(1, count($this->airports_permutations)));
+    }
+
+    foreach ($keys_to_be_removed as $key) {
+      unset($this->airports_permutations[$key]);
+    }
   }
 
   private function createFlights()
