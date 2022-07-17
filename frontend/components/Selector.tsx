@@ -17,7 +17,7 @@ const Selector = ({ departure, arrival }: Props): ReactElement => {
             <div className='text-sm text-slate-500'>{departure.code}</div>
           </div>
         ) : (
-          <div>no departure airport selected</div>
+          <div>no departure</div>
         )}
       </div>
       <MapPin size={28} strokeWidth={1.5} className='text-slate-700' />
@@ -28,7 +28,7 @@ const Selector = ({ departure, arrival }: Props): ReactElement => {
             <div className='text-sm text-slate-500'>{arrival.code}</div>
           </div>
         ) : (
-          <div>no departure airport selected</div>
+          <div>no arrival</div>
         )}
       </div>
     </div>

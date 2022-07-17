@@ -27,6 +27,14 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
     <div className='w-5/6 mx-auto'>
       <h1 className='text-4xl text-center mb-14 font-medium text-slate-700'>Flyaway.now</h1>
       <Selector departure={departure} arrival={arrival} />
+
+      <div className='my-10 grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-x-3'>
+        {airports.map((airport) => (
+          <div key={airport.id}>
+            <AirportElement airport={airport} selectedAirport={departure} setAirport={setDeparture} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
