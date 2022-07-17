@@ -35,6 +35,18 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
           </div>
         ))}
       </div>
+
+      {departure ? (
+        <div className='my-10 grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-x-3'>
+          {airports
+            .filter((airport) => airport.id !== departure.id)
+            .map((airport) => (
+              <div key={airport.id}>
+                <AirportElement airport={airport} selectedAirport={arrival} setAirport={setArrival} />
+              </div>
+            ))}
+        </div>
+      ) : null}
     </div>
   );
 };
