@@ -38,9 +38,11 @@ class Flight extends Model
 
     $results = new Collection();
     foreach ($codes as $code) {
-      $arrivals = ['first_flight' => $flights->where('arrival_code', $code)];
-      $departures = ['second_flight' => $flights->where('departure_code', $code)];
-      $results->push([$arrivals, $departures]);
+      $first_flight = ['first_flight' => $flights->where('arrival_code', $code)];
+      $last_flight = ['last_flight' => $flights->where('departure_code', $code)];
+      if ($first_flight['first_flight']->isNotEmpty() && $last_flight['last_flight']->isNotEmpty()) {
+        $results->push([$first_flight, $last_flight]);
+      }
     }
 
     return $results;
