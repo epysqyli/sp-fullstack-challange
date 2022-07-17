@@ -24,30 +24,6 @@ class Flight extends Model
     return round($price, 2);
   }
 
-  private static function find_all_connections(string $departure_code, string $arrival_code): Collection
-  {
-    $from_departure = self::where('departure_code', $departure_code)->get();
-    $to_arrival = self::where('arrival_code', $arrival_code)->get();
-    return $from_departure->merge($to_arrival);
-  }
-
-  private static function get_connecting_flights(string $departure_code, string $arrival_code): Collection
-  {
-    $flights = self::find_all_connections($departure_code, $arrival_code);
-    $codes = Airport::whereNotIn('code', [$departure_code, $arrival_code])->pluck('code')->toArray();
-
-    $results = new Collection();
-    foreach ($codes as $code) {
-      $first_flight = ['first_flight' => $flights->where('arrival_code', $code)];
-      $last_flight = ['last_flight' => $flights->where('departure_code', $code)];
-      if ($first_flight['first_flight']->isNotEmpty() && $last_flight['last_flight']->isNotEmpty()) {
-        $results->push([$first_flight, $last_flight]);
-      }
-    }
-
-    return $results;
-  }
-
   private static function get_direct_flights(string $departure_code, string $arrival_code)
   {
     return self::where('departure_code', $departure_code)
@@ -55,14 +31,47 @@ class Flight extends Model
       ->orderBy('price', 'asc')->get();
   }
 
+  private static function find_all_connections(string $departure_code, string $arrival_code): Collection
+  {
+    $from_departure = self::where('departure_code', $departure_code)->get();
+    $to_arrival = self::where('arrival_code', $arrival_code)->get();
+    return $from_departure->merge($to_arrival);
+  }
+
+  private static function get_stopover_flights(string $departure_code, string $arrival_code): Collection
+  {
+    $flights = self::find_all_connections($departure_code, $arrival_code);
+    $codes = Airport::whereNotIn('code', [$departure_code, $arrival_code])->pluck('code')->toArray();
+
+    $results = new Collection();
+    foreach ($codes as $code) {
+      $first_flights = ['first_flights' => $flights->where('arrival_code', $code)];
+      $last_flights = ['last_flights' => $flights->where('departure_code', $code)];
+      if ($first_flights['first_flights']->isNotEmpty() && $last_flights['last_flights']->isNotEmpty()) {
+        $results->push([$first_flights, $last_flights]);
+      }
+    }
+
+    return $results;
+  }
+
+  // private static function get_double_stopover_flights(string $departure_code, string $arrival_code): Collection
+  // {
+  //   $flights = self::find_all_connections($departure_code, $arrival_code);
+  //   $codes = Airport::whereNotIn('code', [$departure_code, $arrival_code])->pluck('code')->toArray();
+
+  //   $results = new Collection();
+  // }
+
   public static function search(string $departure_code, string $arrival_code)
   {
     $direct_flights = self::get_direct_flights($departure_code, $arrival_code);
-    $stopover_flights = self::get_connecting_flights($departure_code, $arrival_code);
+    $stopover_flights = self::get_stopover_flights($departure_code, $arrival_code);
 
     return [
       'direct_flights' => $direct_flights,
-      'stopover_flights' => $stopover_flights
+      'stopover_flights' => $stopover_flights,
+      'double_stopover_flights' => []
     ];
   }
 }
