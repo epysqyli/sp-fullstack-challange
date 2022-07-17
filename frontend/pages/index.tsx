@@ -51,7 +51,9 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
         </div>
       )}
 
-      {departure ? <div className='mt-10 mb-7 text-center text-2xl underline underline-offset-3'>Flying To</div> : null}
+      {departure ? (
+        <div className='mt-10 mb-7 text-center text-2xl underline underline-offset-3'>Flying To</div>
+      ) : null}
       {departure && arrival === undefined ? (
         <div className='my-10 grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-x-3'>
           {airports
@@ -62,7 +64,7 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
               </div>
             ))}
         </div>
-      ) : arrival ? (
+      ) : departure && arrival ? (
         <div className='my-10'>
           <AirportElement airport={arrival} selectedAirport={arrival} setAirport={setArrival} />
         </div>
