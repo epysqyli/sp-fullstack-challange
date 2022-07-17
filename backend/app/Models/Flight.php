@@ -22,4 +22,11 @@ class Flight extends Model
     $price = $this->get_distance() * self::PRICE_PER_DISTANCE_UNIT;
     return round($price, 2);
   }
+
+  public static function search($departure_code, $arrival_code)
+  {
+    return Flight::where('departure_code', $departure_code)
+      ->where('arrival_code', $arrival_code)
+      ->orderBy('price', 'asc')->get();
+  }
 }
