@@ -55,23 +55,45 @@ class Flight extends Model
     return $results;
   }
 
-  // private static function get_double_stopover_flights(string $departure_code, string $arrival_code): Collection
-  // {
-  //   $flights = self::find_all_connections($departure_code, $arrival_code);
-  //   $codes = Airport::whereNotIn('code', [$departure_code, $arrival_code])->pluck('code')->toArray();
+  public static function get_double_stopover_flights(string $departure_code, string $arrival_code): Collection
+  {
+    $results = new Collection();
 
-  //   $results = new Collection();
-  // }
+    $flights_to_arrival = self::where('arrival_code', $arrival_code)->whereNot('departure_code', $departure_code)->get();
+    $second_stopover_airports = $flights_to_arrival->pluck('departure_code')->unique()->toArray();
+
+    $flights_to_second_stopover = self::whereIn('arrival_code', $second_stopover_airports)
+      ->whereNotIn('departure_code', [$departure_code, $arrival_code])->get();
+    $first_stopover_airports = $flights_to_second_stopover->whereNotIn('departure_code', $second_stopover_airports)
+      ->pluck('departure_code')->unique()->toArray();
+
+    $flights_to_first_stopover = self::whereIn('arrival_code', $first_stopover_airports)
+      ->where('departure_code', $departure_code)->get();
+
+    $first_flights = ['first_flights' => $flights_to_first_stopover];
+    $intermediate_flights = ['intermediate_flights' => $flights_to_second_stopover];
+    $last_flights = ['last_flights' => $flights_to_arrival];
+    if (
+      $first_flights['first_flights']->isNotEmpty()
+      && $intermediate_flights['intermediate_flights']->isNotEmpty()
+      && $last_flights['last_flights']->isNotEmpty()
+    ) {
+      $results->push($first_flights, $intermediate_flights, $last_flights);
+    }
+
+    return $results;
+  }
 
   public static function search(string $departure_code, string $arrival_code)
   {
     $direct_flights = self::get_direct_flights($departure_code, $arrival_code);
     $stopover_flights = self::get_stopover_flights($departure_code, $arrival_code);
+    $double_stopover_flights = self::get_double_stopover_flights($departure_code, $arrival_code);
 
     return [
       'direct_flights' => $direct_flights,
       'stopover_flights' => $stopover_flights,
-      'double_stopover_flights' => []
+      'double_stopover_flights' => $double_stopover_flights
     ];
   }
 }
