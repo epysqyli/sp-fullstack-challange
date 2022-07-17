@@ -5,7 +5,7 @@ const Layout = ({ children }: LayoutProps): ReactElement => {
   return (
     <>
       <header></header>
-      <main>{children}</main>
+      <main className='py-10'>{children}</main>
       <footer></footer>
     </>
   );
