@@ -46,7 +46,7 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
           ))}
         </div>
       ) : (
-        <div className='my-10'>
+        <div className='my-10 md:w-2/3 xl:w-1/3 mx-auto'>
           <AirportElement airport={departure} selectedAirport={departure} setAirport={setDeparture} />
         </div>
       )}
@@ -65,7 +65,7 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
             ))}
         </div>
       ) : departure && arrival ? (
-        <div className='my-10'>
+        <div className='my-10 md:w-2/3 xl:w-1/3 mx-auto'>
           <AirportElement airport={arrival} selectedAirport={arrival} setAirport={setArrival} />
         </div>
       ) : null}
