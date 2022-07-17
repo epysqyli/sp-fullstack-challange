@@ -20,7 +20,9 @@ const Selector = ({ departure, arrival }: Props): ReactElement => {
           <div>no departure</div>
         )}
       </div>
+
       <MapPin size={28} strokeWidth={1.5} className='text-slate-700' />
+
       <div className='w-2/5 text-right'>
         {arrival ? (
           <div>
