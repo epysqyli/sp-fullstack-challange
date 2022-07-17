@@ -24,76 +24,60 @@ class Flight extends Model
     return round($price, 2);
   }
 
-  private static function get_direct_flights(string $departure_code, string $arrival_code)
+  private static function get_direct_flights(string $departure_code, string $arrival_code): Collection
   {
     return self::where('departure_code', $departure_code)
       ->where('arrival_code', $arrival_code)
       ->orderBy('price', 'asc')->get();
   }
 
-  private static function find_all_connections(string $departure_code, string $arrival_code): Collection
+  private static function get_stopover_flights(string $departure_code, string $arrival_code): array
   {
-    $from_departure = self::where('departure_code', $departure_code)->get();
-    $to_arrival = self::where('arrival_code', $arrival_code)->get();
-    return $from_departure->merge($to_arrival);
-  }
+    $flights_to_arrival = self::where('arrival_code', $arrival_code)
+      ->whereNot('departure_code', $departure_code)->orderBy('price', 'asc')->get();
+    $stopover_airports = $flights_to_arrival->pluck('departure_code')->unique()->toArray();
 
-  private static function get_stopover_flights(string $departure_code, string $arrival_code): Collection
-  {
-    $flights = self::find_all_connections($departure_code, $arrival_code);
-    $codes = Airport::whereNotIn('code', [$departure_code, $arrival_code])->pluck('code')->toArray();
+    $flights_to_stopover = self::whereIn('arrival_code', $stopover_airports)->where('departure_code', $departure_code)
+      ->orderBy('price', 'asc')->get();
 
-    $results = new Collection();
-    foreach ($codes as $code) {
-      $first_flights = ['first_flights' => $flights->where('arrival_code', $code)];
-      $last_flights = ['last_flights' => $flights->where('departure_code', $code)];
-      if ($first_flights['first_flights']->isNotEmpty() && $last_flights['last_flights']->isNotEmpty()) {
-        $results->push([$first_flights, $last_flights]);
-      }
+    if ($flights_to_stopover->isNotEmpty() && $flights_to_arrival->isNotEmpty()) {
+      return [
+        'first_flights' => $flights_to_stopover,
+        'last_flights' => $flights_to_arrival
+      ];
     }
-
-    return $results;
   }
 
-  public static function get_double_stopover_flights(string $departure_code, string $arrival_code): Collection
+  public static function get_double_stopover_flights(string $departure_code, string $arrival_code): array
   {
-    $results = new Collection();
-
     $flights_to_arrival = self::where('arrival_code', $arrival_code)->whereNot('departure_code', $departure_code)->get();
     $second_stopover_airports = $flights_to_arrival->pluck('departure_code')->unique()->toArray();
 
     $flights_to_second_stopover = self::whereIn('arrival_code', $second_stopover_airports)
-      ->whereNotIn('departure_code', [$departure_code, $arrival_code])->get();
+      ->whereNotIn('departure_code', [$departure_code, $arrival_code])->orderBy('price', 'asc')->get();
     $first_stopover_airports = $flights_to_second_stopover->whereNotIn('departure_code', $second_stopover_airports)
       ->pluck('departure_code')->unique()->toArray();
 
     $flights_to_first_stopover = self::whereIn('arrival_code', $first_stopover_airports)
-      ->where('departure_code', $departure_code)->get();
+      ->where('departure_code', $departure_code)->orderBy('price', 'asc')->get();
 
-    $first_flights = ['first_flights' => $flights_to_first_stopover];
-    $intermediate_flights = ['intermediate_flights' => $flights_to_second_stopover];
-    $last_flights = ['last_flights' => $flights_to_arrival];
     if (
-      $first_flights['first_flights']->isNotEmpty()
-      && $intermediate_flights['intermediate_flights']->isNotEmpty()
-      && $last_flights['last_flights']->isNotEmpty()
+      $flights_to_first_stopover->isNotEmpty() && $flights_to_second_stopover->isNotEmpty() && $flights_to_arrival->isNotEmpty()
     ) {
-      $results->push($first_flights, $intermediate_flights, $last_flights);
+      return [
+        'first_flights' => $flights_to_first_stopover,
+        'intermediate_flights' => $flights_to_second_stopover,
+        'last_flights' => $flights_to_arrival
+      ];
     }
-
-    return $results;
   }
 
-  public static function search(string $departure_code, string $arrival_code)
+  public static function search(string $departure_code, string $arrival_code): array
   {
-    $direct_flights = self::get_direct_flights($departure_code, $arrival_code);
-    $stopover_flights = self::get_stopover_flights($departure_code, $arrival_code);
-    $double_stopover_flights = self::get_double_stopover_flights($departure_code, $arrival_code);
-
     return [
-      'direct_flights' => $direct_flights,
-      'stopover_flights' => $stopover_flights,
-      'double_stopover_flights' => $double_stopover_flights
+      'direct_flights' => self::get_direct_flights($departure_code, $arrival_code),
+      'stopover_flights' => self::get_stopover_flights($departure_code, $arrival_code),
+      'double_stopover_flights' => self::get_double_stopover_flights($departure_code, $arrival_code)
     ];
   }
 }
