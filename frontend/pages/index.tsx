@@ -31,7 +31,6 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
 
   return (
     <div className='w-5/6 lg:w-2/3 xl:w-1/2 mx-auto'>
-      <h1 className='text-4xl text-center mb-14 font-medium text-slate-700'>Flyaway.now</h1>
       <div className='mx-auto md:w-4/6 lg:w-1/2 md:my-16'>
         <Selector departure={departure} arrival={arrival} />
       </div>

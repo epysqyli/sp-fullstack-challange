@@ -56,7 +56,7 @@ class Flight extends Model
     $second_stopover_airports = $flights_to_arrival->pluck('departure_code')->unique()->toArray();
 
     $flights_to_second_stopover = self::whereIn('arrival_code', $second_stopover_airports)
-      ->whereNotIn('departure_code', [$departure_code, $arrival_code])->orderBy('price', 'asc')->get();
+      ->whereNotIn('departure_code', [$departure_code, $arrival_code, ...$second_stopover_airports])->orderBy('price', 'asc')->get();
     $first_stopover_airports = $flights_to_second_stopover->whereNotIn('departure_code', $second_stopover_airports)
       ->pluck('departure_code')->unique()->toArray();
 

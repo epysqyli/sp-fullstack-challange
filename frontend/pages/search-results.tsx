@@ -6,6 +6,9 @@ import Layout from "../layouts/Layout";
 import NextPageLayout from "../types/NextPageLayout";
 import Selector from "../components/Selector";
 import { searchFlights, getAirport } from "../lib/apiCalls";
+import DirectFlights from "../components/DirectFlights";
+import StopoverFlights from "../components/StopoverFlights";
+import DoubleStopoverFlights from "../components/DoubleStopoverFlights";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const departureCode = String(context.query.departure);
@@ -27,9 +30,20 @@ interface Props {
 const SearchResults: NextPageLayout<Props> = ({ results, departure, arrival }: Props): ReactElement => {
   return (
     <div className='w-5/6 lg:w-2/3 xl:w-1/2 mx-auto'>
-      <h1 className='text-4xl text-center mb-14 font-medium text-slate-700'>Flyaway.now</h1>
       <div className='mx-auto md:w-4/6 lg:w-1/2 md:my-16'>
         <Selector departure={departure} arrival={arrival} />
+      </div>
+
+      <div>
+        <DirectFlights flights={results["direct_flights"]} />
+      </div>
+
+      <div className="mt-20">
+        <StopoverFlights flights={results["stopover_flights"]} />
+      </div>
+
+      <div className="mt-20">
+        <DoubleStopoverFlights flights={results["double_stopover_flights"]} />
       </div>
     </div>
   );

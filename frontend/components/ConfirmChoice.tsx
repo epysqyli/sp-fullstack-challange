@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactElement } from "react";
 import { Search, Trash2 } from "react-feather";
-import { searchFlights } from "../lib/apiCalls";
 
 interface Props {
   departureCode: string;

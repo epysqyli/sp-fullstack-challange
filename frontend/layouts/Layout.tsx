@@ -4,8 +4,10 @@ import LayoutProps from "../interfaces/LayoutProps";
 const Layout = ({ children }: LayoutProps): ReactElement => {
   return (
     <>
-      <header></header>
-      <main className='py-10'>{children}</main>
+      <header>
+        <h1 className='text-4xl text-center my-10 font-medium text-slate-700'>Flyaway.now</h1>
+      </header>
+      <main className='py-7'>{children}</main>
       <footer></footer>
     </>
   );
