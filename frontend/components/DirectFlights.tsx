@@ -18,7 +18,9 @@ const DirectFlights = ({ flights }: Props): ReactElement => {
           {flights
             .filter((f) => flights[0] !== f)
             .map((flight) => (
-              <FlightResult flight={flight} key={flight.id} />
+              <div className='border rounded-md' key={flight.id}>
+                <FlightResult flight={flight} />
+              </div>
             ))}
         </div>
       </div>

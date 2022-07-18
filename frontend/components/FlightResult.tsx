@@ -7,7 +7,7 @@ interface Props {
 
 const FlightResult = ({ flight }: Props): ReactElement => {
   return (
-    <div className='border rounded-md p-3 text-slate-700 bg-white'>
+    <div className='rounded-md p-3 text-slate-700 bg-white'>
       <div className='font-medium'>
         {flight.departure_code} - {flight.arrival_code}
       </div>

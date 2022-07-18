@@ -13,13 +13,17 @@ const StopoverFlights = ({ flights }: Props): ReactElement => {
         <h3 className='mt-10 mb-5 text-2xl pl-5 underline underline-offset-2'>First leg</h3>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-x-3'>
           {flights["first_flights"].map((flight) => (
-            <FlightResult flight={flight} key={flight.id} />
+            <div className='border rounded-md' key={flight.id}>
+              <FlightResult flight={flight} />
+            </div>
           ))}
         </div>
         <h3 className='mt-10 mb-5 text-2xl pl-5 underline underline-offset-2'>Last leg</h3>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-x-3'>
           {flights["last_flights"].map((flight) => (
-            <FlightResult flight={flight} key={flight.id} />
+            <div className='border rounded-md' key={flight.id}>
+              <FlightResult flight={flight} />
+            </div>
           ))}
         </div>
       </div>
