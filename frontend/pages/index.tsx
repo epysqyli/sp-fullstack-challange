@@ -31,7 +31,7 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
 
   return (
     <div className='w-5/6 lg:w-3/4 xl:w-2/3 mx-auto'>
-      <div className='mx-auto md:w-4/6 lg:w-1/2 md:my-16'>
+      <div className='mx-auto md:w-4/6 lg:w-2/3 md:my-16'>
         <Selector departure={departure} arrival={arrival} />
       </div>
 
@@ -70,7 +70,7 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
       ) : null}
 
       {departure && arrival ? (
-        <div className='mt-20 mx-auto'>
+        <div className='mt-20 mx-auto lg:w-3/4'>
           <ConfirmChoice
             departureCode={departure.code}
             arrivalCode={arrival.code}

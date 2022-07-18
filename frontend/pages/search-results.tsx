@@ -31,7 +31,7 @@ interface Props {
 const SearchResults: NextPageLayout<Props> = ({ results, departure, arrival }: Props): ReactElement => {
   return (
     <div className='w-5/6 lg:w-2/3 xl:w-1/2 mx-auto'>
-      <div className='mx-auto md:w-4/6 lg:w-1/2 md:my-16'>
+      <div className='mx-auto md:w-4/6 lg:w-2/3 md:my-16'>
         <Selector departure={departure} arrival={arrival} />
       </div>
 
