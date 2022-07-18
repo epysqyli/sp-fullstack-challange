@@ -8,7 +8,7 @@ interface Props {
 
 const DirectFlights = ({ flights }: Props): ReactElement => {
   return (
-    <div>
+    <div className="border-b">
       <h2 className='text-center text-3xl font-medium text-slate-700'>Direct flights</h2>
       <div className='my-10 grid grid-cols-1 md:grid-cols-2 gap-y-3 md:gap-x-3'>
         {flights.map((flight) => (
