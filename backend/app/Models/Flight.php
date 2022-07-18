@@ -46,6 +46,8 @@ class Flight extends Model
         'last_flights' => $flights_to_arrival
       ];
     }
+
+    return [];
   }
 
   public static function get_double_stopover_flights(string $departure_code, string $arrival_code): array
@@ -70,6 +72,8 @@ class Flight extends Model
         'last_flights' => $flights_to_arrival
       ];
     }
+
+    return [];
   }
 
   public static function search(string $departure_code, string $arrival_code): array

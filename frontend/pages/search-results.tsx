@@ -4,10 +4,8 @@ import type Airport from "../interfaces/Airport";
 import { ReactElement, useState } from "react";
 import Layout from "../layouts/Layout";
 import NextPageLayout from "../types/NextPageLayout";
-import AirportElement from "../components/AirportElement";
 import Selector from "../components/Selector";
 import { searchFlights, getAirport } from "../lib/apiCalls";
-import ConfirmChoice from "../components/ConfirmChoice";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const departureCode = String(context.query.departure);
