@@ -40,7 +40,7 @@ const SearchResults: NextPageLayout<Props> = ({ results, departure, arrival }: P
       </div>
 
       <Link href='/'>
-        <div className='mt-10 w-fit p-3 mx-auto text-center my-3 rounded-md bg-white shadow-md shadow-slate-300 cursor-pointer hover:bg-slate-500 hover:text-white active:shadow-inner active:bg-slate-600'>
+        <div className='mt-10 w-fit p-3 mx-auto text-center my-3 rounded-md border-2 border-amber-500 bg-white shadow-md shadow-slate-300 cursor-pointer hover:bg-slate-500 hover:text-white active:shadow-inner active:bg-slate-600'>
           Start another search
         </div>
       </Link>
