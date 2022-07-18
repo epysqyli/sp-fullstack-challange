@@ -9,6 +9,7 @@ import { searchFlights, getAirport } from "../lib/apiCalls";
 import DirectFlights from "../components/DirectFlights";
 import StopoverFlights from "../components/StopoverFlights";
 import DoubleStopoverFlights from "../components/DoubleStopoverFlights";
+import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const departureCode = String(context.query.departure);
@@ -34,15 +35,21 @@ const SearchResults: NextPageLayout<Props> = ({ results, departure, arrival }: P
         <Selector departure={departure} arrival={arrival} />
       </div>
 
-      <div className="mt-20">
+      <div className='mt-20'>
         <DirectFlights flights={results["direct_flights"]} />
       </div>
 
-      <div className="mt-20">
+      <Link href='/'>
+        <div className='mt-10 w-fit p-3 mx-auto text-center my-3 rounded-md bg-white shadow-md shadow-slate-300 cursor-pointer hover:bg-slate-500 hover:text-white active:shadow-inner active:bg-slate-600'>
+          Start another search
+        </div>
+      </Link>
+
+      <div className='mt-20'>
         <StopoverFlights flights={results["stopover_flights"]} />
       </div>
 
-      <div className="mt-20">
+      <div className='mt-20'>
         <DoubleStopoverFlights flights={results["double_stopover_flights"]} />
       </div>
     </div>

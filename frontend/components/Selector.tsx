@@ -9,11 +9,11 @@ interface Props {
 
 const Selector = ({ departure, arrival }: Props): ReactElement => {
   return (
-    <div className='flex justify-between items-center border-b-2 pb-5 px-1 text-sm'>
+    <div className='flex justify-between items-start border-b-2 pb-5 px-1 text-sm'>
       <div className='w-2/5'>
         {departure ? (
           <div>
-            <div>{departure.name}</div>
+            <div className='text-amber-800 font-medium'>{departure.name}</div>
             <div className='text-sm text-slate-500'>{departure.code}</div>
           </div>
         ) : (
@@ -21,12 +21,12 @@ const Selector = ({ departure, arrival }: Props): ReactElement => {
         )}
       </div>
 
-      <MapPin size={28} strokeWidth={1.5} className='text-slate-700' />
+      <MapPin size={36} strokeWidth={1.5} className='text-amber-700' />
 
       <div className='w-2/5 text-right'>
         {arrival ? (
           <div>
-            <div>{arrival.name}</div>
+            <div className='text-amber-800 font-medium'>{arrival.name}</div>
             <div className='text-sm text-slate-500'>{arrival.code}</div>
           </div>
         ) : (

@@ -70,7 +70,7 @@ const Index: NextPageLayout<Props> = ({ airports }: Props) => {
       ) : null}
 
       {departure && arrival ? (
-        <div className='mt-20 w-2/3 mx-auto'>
+        <div className='mt-20 mx-auto'>
           <ConfirmChoice
             departureCode={departure.code}
             arrivalCode={arrival.code}
