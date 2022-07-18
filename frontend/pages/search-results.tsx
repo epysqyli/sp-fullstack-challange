@@ -34,7 +34,7 @@ const SearchResults: NextPageLayout<Props> = ({ results, departure, arrival }: P
         <Selector departure={departure} arrival={arrival} />
       </div>
 
-      <div>
+      <div className="mt-20">
         <DirectFlights flights={results["direct_flights"]} />
       </div>
 
