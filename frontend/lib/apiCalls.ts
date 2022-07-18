@@ -8,6 +8,13 @@ const getAirports = async (): Promise<AxiosResponse<Array<Airport>>> => {
   });
 };
 
+const getAirport = async (code: string): Promise<AxiosResponse<Airport>> => {
+  return await axios({
+    method: "GET",
+    url: `http://localhost:8000/airports/${code}`
+  });
+};
+
 const searchFlights = async (departure_code: string, arrival_code: string): Promise<AxiosResponse> => {
   return await axios({
     method: "GET",
@@ -15,4 +22,4 @@ const searchFlights = async (departure_code: string, arrival_code: string): Prom
   });
 };
 
-export { getAirports, searchFlights };
+export { getAirports, getAirport, searchFlights };

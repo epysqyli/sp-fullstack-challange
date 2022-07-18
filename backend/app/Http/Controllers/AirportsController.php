@@ -11,4 +11,10 @@ class AirportsController extends Controller
     $airports = Airport::all();
     return response()->json($airports);
   }
+
+  public function show($code)
+  {
+    $airport = Airport::where('code', $code)->first();
+    return response()->json($airport);
+  }
 }
