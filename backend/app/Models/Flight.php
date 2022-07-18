@@ -40,6 +40,10 @@ class Flight extends Model
     $flights_to_stopover = self::whereIn('arrival_code', $stopover_airports)->where('departure_code', $departure_code)
       ->orderBy('price', 'asc')->get();
 
+    $first_airports = $flights_to_stopover->pluck('arrival_code')->unique()->toArray();
+    $flights_to_arrival = self::where('arrival_code', $arrival_code)->whereIn('departure_code', $first_airports)
+      ->orderBy('price', 'asc')->get();
+
     if ($flights_to_stopover->isNotEmpty() && $flights_to_arrival->isNotEmpty()) {
       return [
         'first_flights' => $flights_to_stopover,
