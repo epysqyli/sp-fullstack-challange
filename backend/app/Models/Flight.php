@@ -40,8 +40,8 @@ class Flight extends Model
     $flights_to_stopover = self::whereIn('arrival_code', $stopover_airports)->where('departure_code', $departure_code)
       ->orderBy('price', 'asc')->get();
 
-    $first_airports = $flights_to_stopover->pluck('arrival_code')->unique()->toArray();
-    $flights_to_arrival = self::where('arrival_code', $arrival_code)->whereIn('departure_code', $first_airports)
+    $reachable_airports = $flights_to_stopover->pluck('arrival_code')->unique()->toArray();
+    $flights_to_arrival = self::where('arrival_code', $arrival_code)->whereIn('departure_code', $reachable_airports)
       ->orderBy('price', 'asc')->get();
 
     if ($flights_to_stopover->isNotEmpty() && $flights_to_arrival->isNotEmpty()) {
@@ -66,6 +66,17 @@ class Flight extends Model
 
     $flights_to_first_stopover = self::whereIn('arrival_code', $first_stopover_airports)
       ->where('departure_code', $departure_code)->orderBy('price', 'asc')->get();
+
+    $first_departing_airports = $flights_to_first_stopover->pluck('arrival_code')->unique()->toArray();
+    $flights_to_second_stopover = self::whereIn('arrival_code', $second_stopover_airports)
+      ->whereIn('departure_code', $first_departing_airports)
+      ->whereNotIn('departure_code', [$departure_code, $arrival_code, ...$second_stopover_airports])
+      ->orderBy('price', 'asc')->get();
+
+    $second_departing_airports = $flights_to_second_stopover->pluck('arrival_code')->unique()->toArray();
+    $flights_to_arrival = self::where('arrival_code', $arrival_code)
+      ->whereIn('departure_code', $second_departing_airports)
+      ->whereNot('departure_code', $departure_code)->get();
 
     if (
       $flights_to_first_stopover->isNotEmpty() && $flights_to_second_stopover->isNotEmpty() && $flights_to_arrival->isNotEmpty()
