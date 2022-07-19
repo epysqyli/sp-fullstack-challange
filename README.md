@@ -3,6 +3,7 @@
 ## setup
 - create a postgre database named 'shippy-pro'
 - go into the backend dir
+- create `.env` file based on `.env.example`
 - run `composer install`
 - run `php artisan migrate`
 - run `php artisan db:seed`
